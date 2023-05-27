@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Responsive Search Bar - Dark Mode</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+
+      #searchQuery {
+        padding-left: 10px;
+        margin-left: 10px;
+        font-size: 20px;
+        border-left: 5px #4caf50 solid;
+
+        text-transform: capitalize;
+        /* background-color: red; */
+      }
+
+      .search-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        width: 100%;
+      }
+
+      .search-input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 60%;
+        max-width: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+      }
+
+      .search-button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        width: 20%;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-left: 10px;
+        border-radius: 10px;
+      }
+      .card {
+        background-color: #101010;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+        max-width: 300px;
+        margin: 10px;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+
+      .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #ffffff93;
+      }
+
+      .card-duration {
+        color: #888;
+        margin-bottom: 10px;
+      }
+
+      .card-button {
+        background-color: #4caf50;
+        border: none;
+        border-radius: 10px;
+
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .card-button:hover {
+        background-color: #45a049;
+      }
+      #noContent {
+        /* background-color: red; */
+        font-size: 30px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        text-transform: capitalize;
+      }
+
+      @media (max-width: 768px) {
+        .card {
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 768px) {
+        .search-container {
+          /* flex-direction: column; */
+          align-items: center;
+        }
+
+        .search-button {
+          margin-left: 10px;
+          /* margin-top: 10px; */
+        }
+      }
+
+      /* Dark Mode Styles */
+      body.dark-mode {
+        background-color: #333;
+        color: #fff;
+      }
+
+      body.dark-mode .search-input {
+        background-color: #1c1c1c;
+        color: #fff;
+        border-color: #666;
+      }
+
+      body.dark-mode .search-button {
+        background-color: #555;
+        color: #fff;
+      }
+      #dots-container {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        bottom: 1%;
+      }
+
+      .dot {
+        height: 20px;
+        width: 20px;
+        margin-right: 10px;
+        border-radius: 10px;
+        background-color: #b3d4fc;
+        animation: pulse 1.5s infinite ease-in-out;
+        /* position: relative; */
+        /* margin-top: 13rem; */
+      }
+
+      .dot:last-child {
+        margin-right: 0;
+      }
+
+      .dot:nth-child(1) {
+        animation-delay: -0.3s;
+      }
+
+      .dot:nth-child(2) {
+        animation-delay: -0.1s;
+      }
+
+      .dot:nth-child(3) {
+        animation-delay: 0.1s;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.8);
+          background-color: #b3d4fc;
+          box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+        }
+
+        50% {
+          transform: scale(1.2);
+          background-color: #6793fb;
+          box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+        }
+
+        100% {
+          transform: scale(0.8);
+          background-color: #b3d4fc;
+          box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="search-container">
+      <input
+        id="searchInp"
+        type="text"
+        class="search-input"
+        placeholder="Search..."
+      />
+      <button onclick="search();" class="search-button">Search</button>
+    </div>
+    <hr style="margin: 30px 0" />
+    <p id="searchQuery"></p>
+    <div id="mainCard"><span id="noContent">No content!</span></div>
+    <div id="dots-container">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+    <script>
+      const search = () => {
+        const apiKey1 = "678a4dbfdamsh372a2d85e63ff27p136084jsn655b2e1c891e";
+        const apiKey2 = "f63b4eef67msh0bdf8bf9adb67aep1ba04ajsn992e7e39a6cb";
+        const noContent = document.getElementById("noContent");
+        noContent.innerHTML = "";
+        const searchInp = document.getElementById("searchInp").value;
+        const dotsContainer = document.getElementById("dots-container");
+        dotsContainer.style.display = "flex";
+        const searchQuery = searchInp;
+        const searchQuerys = document.getElementById("searchQuery");
+        searchQuerys.innerHTML = `<span>${searchQuery}</span>`;
+        const url = `https://porn-api5.p.rapidapi.com/videos/search?q=${encodeURIComponent(
+          searchQuery
+        )}`;
+        fetch(url, {
+          method: "GET",
+          headers: {
+            "X-RapidAPI-Key": !apiKey1 ? apiKey2 : apiKey1,
+            "X-RapidAPI-Host": "porn-api5.p.rapidapi.com",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            let html = "";
+            Array.from(data.data).forEach((elems) => {
+              html += `
+               <div class="card">
+                      <a target="_blank" href="${elems.video_url}"
+                      ><img
+                          class="card-image"
+                          src="${elems.thumb}"
+                          alt="Video Thumbnail"
+                      /></a>
+                      <h3 class="card-title">${elems.title}</h3>
+                      <a target="_blank" href="${elems.source_url}" class="card-button">Go to site</a>
+                  </div>
+               `;
+              dotsContainer.style.display = "none";
+              const mainCard = document.getElementById("mainCard");
+              mainCard.innerHTML = html;
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+    </script>
+  </body>
+</html>
